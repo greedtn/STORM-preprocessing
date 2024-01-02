@@ -223,11 +223,12 @@ def calculate_MPI_fields():
     lon=data.longitude.values
     lat=data.latitude.values
     data.close()
-    latlist=np.load(os.path.join(__location__,'LATLIST_INTERP.npy')).item()
-    lonlist=np.load(os.path.join(__location__,'LONLIST_INTERP.npy')).item()
-    monthlist=np.load(os.path.join(__location__,'MONTHLIST_INTERP.npy')).item()
-    basinlist=np.load(os.path.join(__location__,'BASINLIST_INTERP.npy')).item()
-    preslist=np.load(os.path.join(__location__,'PRESLIST_INTERP.npy')).item()
+    # allow_pickle=Trueを追記。ないとエラーが出る
+    latlist=np.load(os.path.join(__location__,'LATLIST_INTERP.npy'),allow_pickle=True).item()
+    lonlist=np.load(os.path.join(__location__,'LONLIST_INTERP.npy'),allow_pickle=True).item()
+    monthlist=np.load(os.path.join(__location__,'MONTHLIST_INTERP.npy'),allow_pickle=True).item()
+    basinlist=np.load(os.path.join(__location__,'BASINLIST_INTERP.npy'),allow_pickle=True).item()
+    preslist=np.load(os.path.join(__location__,'PRESLIST_INTERP.npy'),allow_pickle=True).item()
 
     sst_list={i:[] for i in range(0,6)}
     month_list={i:[] for i in range(0,6)}
@@ -435,7 +436,12 @@ def pressure_coefficients():
                 for lonidx in lonbins1:
                     i_ind=int((latidx-lat0)/5.)
                     j_ind=int((lonidx-lon0)/5.)
-                    matrix_mpi[i_ind,j_ind]=np.nanmin(MPI[latidx][lonidx])
+                    # indexエラーが出るため、Try-Exceptに変更
+                    try:
+                        matrix_mpi[i_ind,j_ind]=np.nanmin(MPI[latidx][lonidx])
+                    except Exception as e:
+                            print(e)
+
                     
             if idx==1:
                 matrix_mpi=np.c_[matrix_mpi,matrix_mpi[:,-1]]        
