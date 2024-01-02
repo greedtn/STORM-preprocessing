@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# inputデータはサイズが大きすぎるため、Gitで追わない
+IBTrACS.since1980.v04r00.nc
+Monthly_mean_SST.nc
+Monthly_mean_MSLP.nc
